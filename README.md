@@ -1,13 +1,20 @@
 <h1>Jrbebidas</h1>
 jrbebidas é um site responsivo criado para divulgação de um estabelecimento de bebidas. O projeto foi desenvolvido por Levy Buchweitz e Henrique Viegas e visa oferecer uma interface simples e atraente para os usuários conhecerem o estabelecimento, com informações sobre o mesmo e sua localização.
 
+<h2>Logo</h2>
+<img src="img/Logo.png" alt="Logo do jrbebidas" width="100"/>
+<em>Feito por: Levy Vargas</em>
+
 <h2>Tecnologias Utilizadas</h2>
 
-HTML: Estrutura básica do site.
+HTML: Estrutura básica do site.<br>
+<em>(Levy/Henrique)</em>
 
-CSS: Estilos e layout responsivo.
+CSS: Estilos e layout responsivo.<br>
+<em>(Levy/Henrique)</em>
 
-JavaScript: Funcionalidades dinâmicas e interatividade.
+JavaScript: Funcionalidades dinâmicas e interatividade.<br>
+<em>(Levy)</em>
 
 <h2>Funcionalidades</h2>
 Design responsivo:<p> O site é otimizado para diferentes tamanhos de tela
