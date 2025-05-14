@@ -19,5 +19,11 @@ Navegação simples: <p>Acesso rápido às informações essenciais.</p>
 <h2>Contato</h2>
 
 Levy Buchweitz Vargas - Buchweitzlevy@gmail.com
+<a target="_blank" href="https://www.linkedin.com/in/levy-buchweitz-056492260/">
+  <img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white"/>
+</a>
 
 Henrique Viegas - Henrique.viegas2008@gmail.com
+<a target="_blank" href="https://www.linkedin.com/in/henrique-viegas-87a767351?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">
+  <img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white"/>
+</a>
