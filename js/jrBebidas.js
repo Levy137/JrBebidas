@@ -1,11 +1,141 @@
-const menuIcon = document.getElementById("menu-icon");
-const menu = document.getElementById("menu");
+let menuAberto = false;
 
-menuIcon.addEventListener("click", () => {
-  menu.classList.toggle("active");
+document.addEventListener("DOMContentLoaded", function () {
+  inicializarMenu();
+  inicializarCarrinho();
+  inicializarProdutos();
+  inicializarModal();
+  resetarMenuNoCarregamento();
 });
 
-// Sistema de Carrinho
+function resetarMenuNoCarregamento() {
+  const menuUl = document.querySelector("#menu ul");
+  const menuIcon = document.getElementById("menu-icon");
+
+  if (menuUl && menuIcon) {
+    menuUl.classList.remove("active", "menu-mobile-active");
+    menuIcon.classList.remove("ativo");
+    menuAberto = false;
+
+    menuUl.style.display = "";
+    menuUl.style.opacity = "";
+    menuUl.style.transform = "";
+    menuUl.style.transition = "";
+  }
+}
+
+function inicializarMenu() {
+  const menuIcon = document.getElementById("menu-icon");
+  const menuUl = document.querySelector("#menu ul");
+  const menuLinks = document.querySelectorAll("#menu ul li a");
+
+  if (menuIcon && menuUl) {
+    menuIcon.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    menuLinks.forEach((link) => {
+      link.addEventListener("click", function () {
+        fecharMenu();
+      });
+    });
+
+    document.addEventListener("click", function (e) {
+      if (
+        menuAberto &&
+        !menuIcon.contains(e.target) &&
+        !menuUl.contains(e.target)
+      ) {
+        fecharMenu();
+      }
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 767) {
+        fecharMenu();
+
+        setTimeout(() => {
+          const menuUl = document.querySelector("#menu ul");
+          if (menuUl && window.innerWidth > 767) {
+            menuUl.style.display = "";
+            menuUl.style.opacity = "";
+            menuUl.style.transform = "";
+            menuUl.style.transition = "";
+          }
+        }, 100);
+      }
+    });
+  }
+}
+
+function toggleMenu() {
+  const menuUl = document.querySelector("#menu ul");
+  if (menuUl && window.innerWidth <= 767) {
+    if (menuAberto) {
+      fecharMenu();
+    } else {
+      abrirMenu();
+    }
+  }
+}
+
+function abrirMenu() {
+  const menuUl = document.querySelector("#menu ul");
+  const menuIcon = document.getElementById("menu-icon");
+
+  if (menuUl && menuIcon && window.innerWidth <= 767) {
+    menuUl.classList.add("active");
+    menuUl.classList.add("menu-mobile-active");
+    menuIcon.classList.add("ativo");
+    menuAberto = true;
+
+    menuUl.style.opacity = "0";
+    menuUl.style.transform = "translateY(-10px)";
+
+    setTimeout(() => {
+      menuUl.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+      menuUl.style.opacity = "1";
+      menuUl.style.transform = "translateY(0)";
+    }, 10);
+  }
+}
+
+function fecharMenu() {
+  const menuUl = document.querySelector("#menu ul");
+  const menuIcon = document.getElementById("menu-icon");
+
+  if (menuUl && menuIcon) {
+    if (window.innerWidth <= 767) {
+      menuUl.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+      menuUl.style.opacity = "0";
+      menuUl.style.transform = "translateY(-10px)";
+
+      setTimeout(() => {
+        menuUl.classList.remove("active");
+        menuUl.classList.remove("menu-mobile-active");
+        menuIcon.classList.remove("ativo");
+        menuAberto = false;
+
+        if (window.innerWidth <= 767) {
+          menuUl.style.transition = "";
+        }
+      }, 300);
+    } else {
+      menuUl.classList.remove("active");
+      menuUl.classList.remove("menu-mobile-active");
+      menuIcon.classList.remove("ativo");
+      menuAberto = false;
+
+      menuUl.style.display = "";
+      menuUl.style.opacity = "";
+      menuUl.style.transform = "";
+      menuUl.style.transition = "";
+    }
+  }
+}
+
 let carrinho = [];
 
 function adicionarAoCarrinho(nome, preco, emoji) {
@@ -106,11 +236,18 @@ function removerItem(index) {
 }
 
 function limparCarrinho() {
-  if (confirm("Tem certeza que deseja limpar o carrinho?")) {
-    carrinho = [];
-    atualizarContadorCarrinho();
-    atualizarCarrinhoModal();
-  }
+  document.getElementById("modal-confirmar-limpar").style.display = "flex";
+}
+
+function confirmarLimparCarrinho() {
+  carrinho = [];
+  atualizarContadorCarrinho();
+  atualizarCarrinhoModal();
+  fecharModalLimparCarrinho();
+}
+
+function fecharModalLimparCarrinho() {
+  document.getElementById("modal-confirmar-limpar").style.display = "none";
 }
 
 function finalizarCompra() {
@@ -123,19 +260,35 @@ function finalizarCompra() {
     (sum, item) => sum + item.preco * item.quantidade,
     0
   );
-  const itens = carrinho
-    .map((item) => `${item.quantidade}x ${item.nome}`)
-    .join("\n");
 
-  alert(
-    `Compra finalizada!\n\nItens:\n${itens}\n\nTotal: R$ ${total
+  const detalhes = carrinho
+    .map(
+      (item) =>
+        `<div>${item.quantidade}x ${item.nome} - R$ ${(
+          item.preco * item.quantidade
+        )
+          .toFixed(2)
+          .replace(".", ",")}</div>`
+    )
+    .join("");
+
+  document.getElementById("detalhes-compra").innerHTML = `
+    <p><strong>Itens comprados:</strong></p>
+    ${detalhes}
+    <p style="margin-top: 15px;"><strong>Total:</strong> R$ ${total
       .toFixed(2)
-      .replace(".", ",")}\n\nObrigado pela preferência!`
-  );
+      .replace(".", ",")}</p>
+  `;
+
+  document.getElementById("modal-finalizacao").style.display = "flex";
 
   carrinho = [];
   atualizarContadorCarrinho();
   fecharCarrinho();
+}
+
+function fecharModalFinalizacao() {
+  document.getElementById("modal-finalizacao").style.display = "none";
 }
 
 function mostrarNotificacao(mensagem) {
